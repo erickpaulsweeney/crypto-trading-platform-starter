@@ -37,7 +37,7 @@ function App() {
     return (
         <div className="container-all">
             <Header state={state} dispatch={dispatch} ACTIONS={ACTIONS} />
-            { data === null && <div className="fetching">Fetching...</div> }
+            { data === null && <div className="fetching">Fetching...{setData(fetchData())}</div> }
             { data !== null && 
             <div className="container-data">
                 <CurrencyPrice state={state} dispatch={dispatch} ACTIONS={ACTIONS} />
