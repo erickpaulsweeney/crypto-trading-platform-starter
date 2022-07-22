@@ -2,7 +2,7 @@ function CurrencyCard(props) {
   return (
     <div className="container-card">
       <div className="icon">
-        <img src="./images/logo192" alt="" />
+        <img src={} alt="" />
       </div>
       <div className="details">
         <h1 className="unit-price">$49128</h1>
