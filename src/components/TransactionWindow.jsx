@@ -1,6 +1,6 @@
 function TransactionWindow(props) {
     return (
-        <div className="container-transaction-window">
+        <div className="container-window">
 
         </div>
     )

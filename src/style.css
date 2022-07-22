@@ -110,3 +110,7 @@ body {
     color: rgb(54, 54, 54);
     font-weight: 500;
 }
+
+.container-window {
+    display: none;
+}

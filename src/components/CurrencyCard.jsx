@@ -1,6 +1,8 @@
 function CurrencyCard(props) {
     return (
-        <div className="container-card">
+        <div className="container-card" onClick={() => {
+            
+        }}>
 
         </div>
     )
