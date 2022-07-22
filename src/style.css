@@ -1,0 +1,107 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600;700&display=swap');
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    overflow: hidden;
+    background-image: url("./images/bg.svg");
+    background-position: center;
+    background-repeat: repeat;
+    display: flex;
+    justify-content: center;
+}
+
+.container-all {
+    width: 60vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.container-header {
+    width: 100%;
+    height: 25%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.earn-money {
+    font-size: 36px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.buy-food {
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+
+.wallet {
+    font-size: 24px;
+    font-weight: 500;
+    margin-bottom: 10px;
+}
+
+.portfolio {
+    font-size: 36px;
+    font-weight: 500;
+}
+
+.container-currency-price {
+    width: 100%;
+    height: 15%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.container-card {
+    width: 30%;
+    background-color: white;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+}
+
+.bottom-row {
+    display: flex;
+    height: 65%;
+}
+
+.container-holdings {
+    height: 100%;
+    width: 50%;
+}
+
+.title-holdings {
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.buy-some {
+    color: rgb(54, 54, 54);
+    font-weight: 500;
+}
+
+.container-transactions {
+    height: 100%;
+    width: 50%;
+}
+
+.title-transactions {
+    font-size: 40px;
+    font-weight: 400;
+    margin-bottom: 20px;
+}
+
+.no-transactions {
+    color: rgb(54, 54, 54);
+    font-weight: 500;
+}
