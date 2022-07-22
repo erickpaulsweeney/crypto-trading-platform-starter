@@ -32,6 +32,11 @@ body {
     align-items: center;
 }
 
+.container-data {
+    height: 75%;
+    width: 100%;
+}
+
 .earn-money {
     font-size: 36px;
     font-weight: 500;
@@ -104,4 +109,8 @@ body {
 .no-transactions {
     color: rgb(54, 54, 54);
     font-weight: 500;
+}
+
+.container-window {
+    display: none;
 }
