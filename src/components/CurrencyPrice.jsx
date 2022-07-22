@@ -3,9 +3,9 @@ import CurrencyCard from "./CurrencyCard";
 function CurrencyPrice(props) {
   return (
     <div className="container-currency-price">
-      <CurrencyCard props={props} coin={props.state.data[0].id} />
-      <CurrencyCard props={props} coin={props.state.data[1].id} />
-      <CurrencyCard props={props} coin={props.state.data[2].id} />
+      <CurrencyCard state={props.state} dispatch={props.dispatch} ACTIONS={props.ACTIONS} coin={0} />
+      <CurrencyCard state={props.state} dispatch={props.dispatch} ACTIONS={props.ACTIONS} coin={1} />
+      <CurrencyCard state={props.state} dispatch={props.dispatch} ACTIONS={props.ACTIONS} coin={2} />
     </div>
   );
 }

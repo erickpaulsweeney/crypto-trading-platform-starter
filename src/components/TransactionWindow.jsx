@@ -7,7 +7,7 @@ function TransactionWindow(props) {
     let max = props.state.currWallet * currPrice;
 
     return (
-        <div className="container-window">
+        <div className="container-window" style={{ display: props.state.window && 'flex' }}>
             <div className="window-header">{transaction} + {props.input}</div>
             <div className="window-price">Current Price: {currPrice}</div>
             <div className="input-row">
