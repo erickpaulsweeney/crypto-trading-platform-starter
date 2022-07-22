@@ -32,6 +32,11 @@ body {
     align-items: center;
 }
 
+.container-data {
+    height: 75%;
+    width: 100%;
+}
+
 .earn-money {
     font-size: 36px;
     font-weight: 500;
