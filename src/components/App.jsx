@@ -42,7 +42,7 @@ function App() {
         currWallet: 100,
         currPortfolio: 0,
         prices: { bit: 0, eth: 0, doge: 0 },
-        holdings: { bit: 0, eth: 0, doge: 0 },
+        holdings: { bit: { totalPaid: 0, amount: 0 }, eth: { totalPaid: 0, amount: 0 }, doge: { totalPaid: 0, amount: 0 } },
         transactions: []
     }
     let [state, dispatch] = useReducer(reducer, stateObj)

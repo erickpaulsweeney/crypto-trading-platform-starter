@@ -2,7 +2,7 @@ import { useState } from "react";
 
 function TransactionWindow(props) {
     let [transaction, setTransaction] = useState('Buy');
-    let [flag, setFlag] = useState(true);
+    let [isDisabled, setIsDisabled] = useState(false);
     let currPrice = props.state.prices[props.input];
     let max = props.state.currWallet * currPrice;
 
@@ -12,8 +12,8 @@ function TransactionWindow(props) {
             <div className="window-price">Current Price: {currPrice}</div>
             <div className="input-row">
                 <input type="number" placeholder="0" onChange={(ev) => {
-                    if (ev.target.value > max) setFlag(false);
-                    else setFlag(true);
+                    if (ev.target.value > max) setIsDisabled(true);
+                    else setIsDisabled(false);
                 }}/>
                 <div className="window-max">Max: {max}</div>
             </div>
@@ -25,7 +25,7 @@ function TransactionWindow(props) {
                 <input type="radio" id="sell-radio" name="transaction" onClick={() => transaction !== 'Sell' && setTransaction('Buy')}/>
                 <label htmlFor="sell-radio">Sell</label>
             </div>
-            <button className="transaction-btn" disabled={!flag}>{transaction}</button>
+            <button className="transaction-btn" disabled={isDisabled}>{transaction}</button>
         </div>
     )
 }
