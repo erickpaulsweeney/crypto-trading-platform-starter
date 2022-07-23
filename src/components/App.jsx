@@ -3,13 +3,14 @@ import CurrencyPrice from "./CurrencyPrice";
 import Holdings from "./Holdings";
 import Transactions from "./Transactions";
 import TransactionWindow from "./TransactionWindow";
-import { useEffect, useReducer, useRef } from "react";
+import { useEffect, useReducer } from "react";
 
 const ACTIONS = {
     SET_DATA: "set-data",
     TOGGLE_WINDOW: 'toggle-window',
     BUY_COIN: "buy-coin",
-    SELL_COIN: "sell-coin"
+    SELL_COIN: "sell-coin", 
+    CALC_PORTFOLIO: "calculate-portfolio"
 };
 
 // { type: , payload:, currency: }
@@ -18,20 +19,39 @@ function reducer(state, action) {
     switch (action.type) {
         case ACTIONS.SET_DATA:
             return { ...state, data: action.payload, prices: { bit: action.payload[0].current_price, eth: action.payload[1].current_price, doge: action.payload[2].current_price } };
+        case ACTIONS.CALC_PORTFOLIO: 
+            let newPortfolio = 0;
+            Object.keys(state.holdings).forEach(key => newPortfolio += state.holdings[key].amount * state.prices[key] );
+            return { ...state, currPortfolio:newPortfolio }
         case ACTIONS.BUY_COIN:
-            let buyState = JSON.parse(JSON.stringify(state));
-            let buyWallet = buyState.currWallet - action.payload;
-            let buyHoldings = buyState.holdings[action.currency].amount + action.payload;
-            return { ...state, currWallet: buyWallet, holdings: buyHoldings };
+            let buyCurr = action.payload.currency;
+            let buyWallet = state.currWallet - action.payload.actualValue;
+            let buyHoldings = { ...state.holdings, [buyCurr]: { totalPaid: state.holdings[buyCurr].totalPaid + action.payload.actualValue, amount: state.holdings[buyCurr].amount + action.payload.amount } };
+            let buyTransactions = state.transactions.concat([{ 
+                type: 'Buy', 
+                currency: buyCurr, 
+                amount: action.payload.amount, 
+                price: action.payload.price, 
+                paid: action.payload.actualValue, 
+                time: new Date()
+            }])
+            return { ...state, currWallet: buyWallet, holdings: buyHoldings, transactions: buyTransactions };
         case ACTIONS.SELL_COIN:
-            let sellState = JSON.parse(JSON.stringify(state));
-            let sellWallet = sellState.currWallet + action.payload;
-            let sellHolding = sellState.holdings[action.currency].amount - action.payload;
-            return { ...state, currWallet: sellWallet, holdings: sellHolding };
+            let sellCurr = action.payload.currency;
+            let sellWallet = state.currWallet + action.payload.actualValue;
+            let sellHoldings = { ...state.holdings, [sellCurr]: { totalPaid: state.holdings[sellCurr].totalPaid - action.payload.actualValue, amount: state.holdings[sellCurr].amount - action.payload.amount } };
+            let sellTransactions = state.transactions.concat([{ 
+                type: 'Sell', 
+                currency: sellCurr, 
+                amount: action.payload.amount, 
+                price: action.payload.price, 
+                paid: action.payload.actualValue, 
+                time: new Date()
+            }])
+            return { ...state, currWallet: sellWallet, holdings: sellHoldings, transactions: sellTransactions };
         case ACTIONS.TOGGLE_WINDOW:
             let coin //= action.payload ? action.payload === 0 ? 'bit' : action.payload === 1 ? 'eth' : 'doge' : undefined ;
             if (action.payload !== undefined) {
-                console.log(action.payload)
                 switch (action.payload) {
                     case 0: 
                         coin = 'bit';
@@ -69,19 +89,20 @@ function App() {
         active: ''
     };
     let [state, dispatch] = useReducer(reducer, stateObj);
-    let box = useRef(null);
 
     useEffect(() => {
         function fetchData() {
             fetch('https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin%2C%20ethereum%2C%20dogecoin&order=market_cap_desc&per_page=100&page=1&sparkline=false&price_change_percentage=%601h%2C24h%2C7d%60')
                 .then(response => response.json())
-                .then(data => dispatch({ type: ACTIONS.SET_DATA, payload: data }));
+                .then(data => {
+                    dispatch({ type: ACTIONS.SET_DATA, payload: data })
+                    dispatch({ type: ACTIONS.CALC_PORTFOLIO });
+                });
         }
         fetchData();
         setInterval(() => {
             fetchData();
-            console.log('refresh')
-        }, 10000)
+        }, 5000)
     }, [])
 
     return (
@@ -97,7 +118,7 @@ function App() {
                         <Holdings state={state} dispatch={dispatch} ACTIONS={ACTIONS} />
                         <Transactions state={state} dispatch={dispatch} ACTIONS={ACTIONS} />
                     </div>
-                    <TransactionWindow ref={box} state={state} dispatch={dispatch} ACTIONS={ACTIONS} />
+                    <TransactionWindow state={state} dispatch={dispatch} ACTIONS={ACTIONS} />
                 </div>
             }
         </div>

@@ -3,8 +3,10 @@ import { useState } from "react";
 function TransactionWindow(props) {
     let [transaction, setTransaction] = useState('Buy');
     let [isDisabled, setIsDisabled] = useState(false);
+    let [value, setValue] = useState('');
     let currPrice = props.state.prices[props.state.active];
-    let max = props.state.currWallet / currPrice;
+    let buyMax = props.state.currWallet / currPrice;
+    let sellMax = props.state.active && props.state.holdings[props.state.active].amount;
     let coin = props.state.active === 'bit' ? 'Bitcoin' : props.state.active === 'eth' ? 'Ethereum' : 'Dogecoin';
 
     return (
@@ -12,17 +14,19 @@ function TransactionWindow(props) {
             <div className="container-main">
                 <div className="window-header">
                     <div className="header-text">{transaction} {coin}</div>
-                    <div className="window-close" onClick={(ev) => {
+                    <div className="window-close" onClick={() => {
+                        setValue('');
                         props.dispatch({ type: props.ACTIONS.TOGGLE_WINDOW });
                     }}>X</div>
                 </div>
                 <div className="window-price">Current Price: {currPrice}</div>
                 <div className="input-row">
-                    <input type="number" placeholder="0" className="input-bar" onChange={(ev) => {
-                        if (ev.target.value > max) setIsDisabled(true);
+                    <input type="number" placeholder="0" className="input-bar" value={value} onChange={(ev) => {
+                        if (ev.target.value > (transaction === 'Buy' ? buyMax : sellMax)) setIsDisabled(true);
                         else setIsDisabled(false);
+                        setValue(ev.target.value);
                     }} />
-                    <div className="window-max">Max: {max}</div>
+                    <div className="window-max">Max: {transaction === 'Buy' ? buyMax : sellMax }</div>
                 </div>
                 <div className="options-row">
                     <div className="buy-row">
@@ -35,7 +39,16 @@ function TransactionWindow(props) {
                     </div>
                 </div>
 
-                <button className="transaction-btn" disabled={isDisabled}>{transaction}</button>
+                <button className="transaction-btn" disabled={isDisabled} onClick={(ev) => {
+                    if (ev.target.disabled) {
+                        return;
+                    }
+                    setValue('');
+                    props.dispatch({ 
+                        type: transaction === 'Buy' ? props.ACTIONS.BUY_COIN : props.ACTIONS.SELL_COIN,
+                        payload: { amount: Number(value), currency: props.state.active, actualValue: value * currPrice, price: currPrice }
+                     })
+                }}>{transaction}</button>
             </div>
         </div>
     )
