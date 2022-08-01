@@ -26,7 +26,7 @@ function TransactionWindow(props) {
                         else setIsDisabled(false);
                         setValue(ev.target.value);
                     }} />
-                    <div className="window-max">Max: {transaction === 'Buy' ? buyMax : sellMax }</div>
+                    <div className="window-max" onClick={() => setValue(transaction === 'Buy' ? buyMax : sellMax)}>Max: {transaction === 'Buy' ? buyMax : sellMax }</div>
                 </div>
                 <div className="options-row">
                     <div className="buy-row">
